@@ -30,7 +30,7 @@ const Home: NextPage = () => {
 
             <Panels>
                <Panel image='impossible_river.svg' title='Art & Design' />
-               <Panel image='impossible_river.svg' title='My projects' link='/projects' />
+               <Panel image='code.png' title='My projects' link='/projects' />
                <Panel image='impossible_river.svg' title='My projects' />
                <Panel title='My projects' />
                <Panel title='My projects' />

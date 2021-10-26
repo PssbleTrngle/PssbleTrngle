@@ -64,6 +64,7 @@ const Box = css`
 
 const ImageBox = styled.div<{ offset: Offset }>`
    ${Box};
+   overflow: hidden;
    user-select: none;
    background: ${p => lighten(0.1, p.theme.bg)};
    position: absolute;
@@ -76,7 +77,7 @@ const ImageBox = styled.div<{ offset: Offset }>`
    bottom: ${p => (p.offset.y < 0 ? `${p.offset.y * 15}px` : null)};
 
    img {
-      object-fit: contain;
+      object-fit: cover;
    }
 `
 
