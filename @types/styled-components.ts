@@ -1,4 +1,4 @@
-import 'styled-components';
+import 'styled-components'
 
 declare module 'styled-components' {
    interface DefaultTheme {
@@ -8,9 +8,9 @@ declare module 'styled-components' {
       secondary: string
       text: string
       triangle: {
-         primary: string,
-         hover: string,
-      },
+         primary: string
+         hover: string
+      }
       link: {
          default: string
          visited: string

@@ -5,10 +5,12 @@ import '../styles/reset.css'
 import dark from '../themes/dark'
 
 function App({ Component, pageProps }: AppProps) {
-  return <ThemeProvider theme={dark}>
-    <Globals />
-    <Component {...pageProps} />
-  </ThemeProvider>
+   return (
+      <ThemeProvider theme={dark}>
+         <Globals />
+         <Component {...pageProps} />
+      </ThemeProvider>
+   )
 }
 
 const Globals = createGlobalStyle`

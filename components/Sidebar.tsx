@@ -1,5 +1,5 @@
-import { FC, useEffect, useMemo, useState } from "react";
-import styled, { useTheme } from "styled-components";
+import { FC, useEffect, useMemo, useState } from 'react'
+import styled, { useTheme } from 'styled-components'
 
 function createBlob() {
    const start = 0
@@ -8,7 +8,7 @@ function createBlob() {
    const amount = 6
    const points = new Array(amount).fill(null).map((_, i) => {
       const x = Math.random() * 10 + 5 * (i % 2)
-      const y = (i + 1) / amount * 100
+      const y = ((i + 1) / amount) * 100
       return { x, y }
    })
 
@@ -46,7 +46,7 @@ const smallBlob = {
       C-28.5,-60.1,-14.3,-61.4,1.3,-63.2
       C16.9,-65,33.7,-67.3,48.9,-61.8
       Z
-   `
+   `,
 }
 
 const bigBlob = {
@@ -63,13 +63,13 @@ const bigBlob = {
       C-35.6,-29.2,-43,-49.2,-38.3,-62.9
       C-33.5,-76.6,-16.8,-83.9,-1,-82.6
       C14.9,-81.3,29.7,-71.3,39.3,-59.2
-      Z`
+      Z`,
 }
 
 const Sidebar: FC = ({ children }) => {
    const { sidebar, bg } = useTheme()
    const [small, setSmall] = useState(false)
-   const blob = useMemo(() => small ? smallBlob : bigBlob, [small])
+   const blob = useMemo(() => (small ? smallBlob : bigBlob), [small])
 
    useEffect(() => {
       const listener = () => setSmall(document.documentElement.scrollTop >= 200)
@@ -77,21 +77,20 @@ const Sidebar: FC = ({ children }) => {
       return () => window.removeEventListener('scroll', listener)
    })
 
-   return <Style>
-      {/*<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+   return (
+      <Style>
+         {/*<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
          <path
             fill={sidebar}
             d={path}
          />
       </svg>*/}
-      <svg viewBox='0 0 100 100' xmlns="http://www.w3.org/2000/svg">
-         <path
-            fill={sidebar}
-            {...blob}
-         />
-      </svg>
-      {children}
-   </Style>
+         <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+            <path fill={sidebar} {...blob} />
+         </svg>
+         {children}
+      </Style>
+   )
 }
 
 const Style = styled.section`
@@ -112,4 +111,4 @@ const Style = styled.section`
    }
 `
 
-export default Sidebar;
+export default Sidebar
