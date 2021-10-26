@@ -22,6 +22,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
       'hardcore gamer',
       'entitled react enthusiast',
       'cauliflower enjoyer',
+      'hobby picnicker'
    ]
 
    return { props: { panels, subsubtitles } }
