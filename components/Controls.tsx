@@ -14,7 +14,7 @@ export const INITIAL = {
    target: new Vector3(1.0496749711071243, 3.3160550932734916, -2.3418535461885215),
 }
 
-const Controls: FC<{ zoom: number }> = ({ zoom }) => {
+const Controls: FC<{ zoom: number; enabled?: boolean }> = ({ zoom, enabled = true }) => {
    const { camera, gl } = useThree()
    const controls = useRef<OrbitControls>()
 
@@ -28,6 +28,7 @@ const Controls: FC<{ zoom: number }> = ({ zoom }) => {
    //@ts-ignore
    return (
       <orbitControls
+         enabled={enabled}
          enableZoom={false}
          enablePan={false}
          target={INITIAL.target}

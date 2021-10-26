@@ -21,7 +21,7 @@ function usePolygon(points: number, rand = 0) {
    }, [points, rand])
 }
 
-const Canvas: FC<{ height?: ReactText; width?: ReactText }> = ({ children, ...props }) => {
+const Canvas: FC<{ height?: ReactText; width?: ReactText, frozen?: boolean }> = ({ children, frozen, ...props }) => {
    const div = useRef<HTMLDivElement>(null)
    const [zoom, setZoom] = useState(20)
 
@@ -42,7 +42,7 @@ const Canvas: FC<{ height?: ReactText; width?: ReactText }> = ({ children, ...pr
             camera={{ zoom, position: INITIAL.pos, quaternion: INITIAL.quat }}>
             <ambientLight />
             <pointLight position={[5, -10, 8]} />^{children}
-            <Controls zoom={zoom} />
+            <Controls enabled={!frozen} zoom={zoom} />
          </BaseCanvas>
       </Style>
    )

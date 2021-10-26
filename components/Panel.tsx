@@ -78,6 +78,28 @@ const ImageBox = styled.div<{ offset: Offset }>`
 
    img {
       object-fit: cover;
+
+      &::after,
+      &::before {
+         content: '';
+         position: absolute;
+      }
+
+      &::before {
+         top: 0;
+         left: 0;
+         height: 100%;
+         width: 100%;
+         background: ${p => lighten(0.1, p.theme.bg)};
+      }
+
+      &::after {
+         content: 'Image Unavaibable';
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         font-style: italic;
+      }
    }
 `
 

@@ -1,16 +1,42 @@
-import type { NextPage } from 'next'
-import { useCallback } from 'react'
+import { sample } from 'lodash'
+import type { GetStaticProps, NextPage } from 'next'
+import { mix } from 'polished'
+import { useCallback, useMemo } from 'react'
 import styled, { useTheme } from 'styled-components'
 import Button from '../components/Button'
 import Canvas from '../components/Canvas'
-import Panel from '../components/Panel'
+import Panel, { PanelData } from '../components/Panel'
 import Sidebar from '../components/Sidebar'
 import Triangle from '../components/Triangle'
 
-const Home: NextPage = () => {
+export const getStaticProps: GetStaticProps<Props> = async () => {
+   const panels: PanelData[] = [
+      { image: 'code.png', title: 'My projects', link: '/projects' },
+      { image: 'impossible_river.svg', title: 'Art & Design' },
+      { title: 'Placeholder', image: 'none' },
+      { title: 'Placeholder' },
+   ]
+
+   const subsubtitles = [
+      'parttime garlic bread enthusiast',
+      'hardcore gamer',
+      'entitled react enthusiast',
+      'cauliflower enjoyer',
+   ]
+
+   return { props: { panels, subsubtitles } }
+}
+
+interface Props {
+   panels: PanelData[]
+   subsubtitles: string[]
+}
+const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
    const scrollDown = useCallback(() => {
       document.documentElement.scrollTo({ top: window.innerHeight })
    }, [])
+
+   const subsubtitle = useMemo(() => sample(subsubtitles), [subsubtitles])
 
    return (
       <Style>
@@ -24,17 +50,15 @@ const Home: NextPage = () => {
             <Title>
                <Name>Niklas Widmann</Name>
                <SubTitle>Web Developer</SubTitle>
+               {subsubtitle && <SubSubTitle>& {subsubtitle}</SubSubTitle>}
 
                <Button onClick={scrollDown}>About me</Button>
             </Title>
 
             <Panels>
-               <Panel image='impossible_river.svg' title='Art & Design' />
-               <Panel image='code.png' title='My projects' link='/projects' />
-               <Panel image='impossible_river.svg' title='My projects' />
-               <Panel title='My projects' />
-               <Panel title='My projects' />
-               <Panel image='impossible_river.svg' title='My projects' />
+               {panels.map((props, i) => (
+                  <Panel key={i} {...props} />
+               ))}
             </Panels>
          </Content>
       </Style>
@@ -68,10 +92,20 @@ const SubTitle = styled.h2`
    font-size: 3vh;
 `
 
+const SubSubTitle = styled.h3`
+   font-size: 1vh;
+   margin-top: 0.2em;
+   color: ${p => mix(0.7, p.theme.text, p.theme.bg)};
+`
+
 const Title = styled.section`
    height: 100vh;
    padding-top: 30vh;
    padding-left: 5rem;
+
+   @media (orientation: portrait) {
+      padding-left: 2rem;
+   }
 
    ${Button} {
       margin-top: 2rem;
