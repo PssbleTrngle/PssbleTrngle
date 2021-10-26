@@ -1,11 +1,8 @@
-import { Canvas as BaseCanvas, extend } from '@react-three/fiber'
+import { Canvas as BaseCanvas } from '@react-three/fiber'
 import React, { FC, ReactText, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { useDebouncedCallback } from 'use-debounce'
 import Controls, { INITIAL } from './Controls'
-
-extend({ OrbitControls })
 
 function usePolygon(points: number, rand = 0) {
    return useMemo(() => {

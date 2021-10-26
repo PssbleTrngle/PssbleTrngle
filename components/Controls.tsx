@@ -1,7 +1,9 @@
-import { useFrame, useThree } from '@react-three/fiber'
+import { extend, useFrame, useThree } from '@react-three/fiber'
 import React, { FC, useEffect, useRef } from 'react'
 import { Quaternion, Vector3 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+
+extend({ OrbitControls })
 
 export const INITIAL = {
    pos: new Vector3(-5.7410315329449535, -3.46659086468632, -9.042776520443246),
@@ -25,7 +27,6 @@ const Controls: FC<{ zoom: number; enabled?: boolean }> = ({ zoom, enabled = tru
       camera.updateProjectionMatrix()
    }, [zoom, camera])
 
-   //@ts-ignore
    return (
       <orbitControls
          enabled={enabled}

@@ -1,9 +1,15 @@
 import Image from 'next/image'
-import { LinkProps } from 'next/link'
 import { lighten } from 'polished'
 import { FC, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import { ButtonLink } from './Link'
+
+export interface PanelData {
+   image?: string
+   text?: string
+   title?: string
+   link?: string
+}
 
 const LOREM =
    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec egestas lacus et tortor commodo facilisis et ac enim. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse vel lectus luctus mauris aliquet suscipit. Sed cursus est id diam pretium porta. Pellentesque vestibulum magna eu nulla hendrerit, eu sodales quam tempor.'
@@ -30,12 +36,7 @@ function useOffset(): Offset {
    )
 }
 
-const Panel: FC<{
-   image?: string
-   text?: string
-   title?: string
-   link?: LinkProps['href']
-}> = ({ children, image, text = LOREM, title, link }) => {
+const Panel: FC<PanelData> = ({ children, image, text = LOREM, title, link }) => {
    const offset = useOffset()
 
    return (
