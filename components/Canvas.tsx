@@ -18,7 +18,11 @@ function usePolygon(points: number, rand = 0) {
    }, [points, rand])
 }
 
-const Canvas: FC<{ height?: ReactText; width?: ReactText, frozen?: boolean }> = ({ children, frozen, ...props }) => {
+const Canvas: FC<{ height?: ReactText; width?: ReactText; frozen?: boolean }> = ({
+   children,
+   frozen,
+   ...props
+}) => {
    const div = useRef<HTMLDivElement>(null)
    const [zoom, setZoom] = useState(20)
 
