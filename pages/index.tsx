@@ -13,8 +13,8 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
    const panels: PanelData[] = [
       { image: 'code.png', title: 'My projects', link: '/projects' },
       { image: 'impossible_river.svg', title: 'Art & Design' },
-      { title: 'Placeholder', image: 'none' },
       { title: 'Placeholder' },
+      { title: 'Placeholder', image: 'none' },
    ]
 
    const subsubtitles = [
@@ -22,7 +22,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
       'hardcore gamer',
       'entitled react enthusiast',
       'cauliflower enjoyer',
-      'hobby picnicker'
+      'hobby picnicker',
    ]
 
    return { props: { panels, subsubtitles } }
