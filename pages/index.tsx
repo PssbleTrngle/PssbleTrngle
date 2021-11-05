@@ -72,44 +72,46 @@ const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
    if (panelHeight === 0) return null
 
    return (
-      <Parallax pages={pages} ref={parallax}>
-         <Background stars={30} />
+      <>
+         <Parallax pages={pages} ref={parallax}>
+            <Background stars={30} />
 
-         <TrailLayer sticky={{ start: 0, end: 9999 }}>
-            <Trail />
-         </TrailLayer>
+            <TrailLayer sticky={{ start: 0, end: 9999 }}>
+               <Trail />
+            </TrailLayer>
 
-         <ParallaxLayer sticky={{ start: 0, end: 0.1 }}>
-            <Title>
-               <Name>Niklas Widmann</Name>
-               <SubTitle>Web Developer</SubTitle>
-               {subsubtitle && <SubSubTitle>& {subsubtitle}</SubSubTitle>}
+            <ParallaxLayer sticky={{ start: 0, end: 0.1 }}>
+               <Title>
+                  <Name>Niklas Widmann</Name>
+                  <SubTitle>Web Developer</SubTitle>
+                  {subsubtitle && <SubSubTitle>& {subsubtitle}</SubSubTitle>}
 
-               <Button onClick={scrollDown}>About me</Button>
-            </Title>
-         </ParallaxLayer>
+                  <Button onClick={scrollDown}>About me</Button>
+               </Title>
+            </ParallaxLayer>
 
-         <ParallaxLayer offset={1.2} factor={pages - 1.2}>
-            <Observable onChange={setObserved} />
-         </ParallaxLayer>
+            <ParallaxLayer offset={1.2} factor={pages - 1.2}>
+               <Observable onChange={setObserved} />
+            </ParallaxLayer>
 
-         <SidebarLayer sticky={{ start: 0, end: 9999 }}>
-            <Sidebar minimize={observed}>
-               <TriangleCanvas height='500px' width='500px' />
-            </Sidebar>
-         </SidebarLayer>
+            <SidebarLayer sticky={{ start: 0, end: 9999 }}>
+               <Sidebar minimize={observed}>
+                  <TriangleCanvas height='500px' width='500px' />
+               </Sidebar>
+            </SidebarLayer>
 
-         <ParallaxLayer factor={pages - 1} offset={1}>
-            <Fadeout>
-               <Panels>
-                  {panels.map(props => (
-                     <Panel {...props} key={props.key} />
-                  ))}
-               </Panels>
-               <Footer />
-            </Fadeout>
-         </ParallaxLayer>
-      </Parallax>
+            <ParallaxLayer factor={pages - 1} offset={1}>
+               <Fadeout>
+                  <Panels>
+                     {panels.map(props => (
+                        <Panel {...props} key={props.key} />
+                     ))}
+                  </Panels>
+                  <Footer />
+               </Fadeout>
+            </ParallaxLayer>
+         </Parallax>
+      </>
    )
 }
 

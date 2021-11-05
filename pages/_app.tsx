@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app'
 import { darken } from 'polished'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import Head from '../components/Head'
 import '../styles/fonts.css'
 import '../styles/reset.css'
 import dark from '../themes/dark'
@@ -8,6 +9,7 @@ import dark from '../themes/dark'
 function App({ Component, pageProps }: AppProps) {
    return (
       <ThemeProvider theme={dark}>
+         <Head />
          <Globals />
          <Component {...pageProps} />
       </ThemeProvider>
