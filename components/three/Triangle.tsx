@@ -1,7 +1,7 @@
 import { animated, useSpring } from '@react-spring/three'
 import React, { Dispatch, FC, useEffect, useMemo, useRef, useState } from 'react'
 import { DefaultTheme } from 'styled-components'
-import { Mesh, Object3D, Vector3 } from 'three'
+import { Mesh, Object3D } from 'three'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 
 const loader = new OBJLoader()
@@ -26,9 +26,8 @@ const Triangle: FC<{
    const [hovered, setHover] = useState(false)
 
    const { primary, hover } = theme.triangle
-   const { color, scale } = useSpring({
+   const { color } = useSpring({
       color: hovered ? hover : primary,
-      scale: hovered ? 1 : 1,
       config: { duration: 100 },
    })
 
@@ -41,7 +40,6 @@ const Triangle: FC<{
 
    return (
       <animated.mesh
-         scale={scale.to(x => new Vector3(x, x, x))}
          ref={ref}
          onPointerOver={() => setHover(true)}
          onPointerOut={() => setHover(false)}
