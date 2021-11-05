@@ -1,20 +1,32 @@
+import { Parallax, ParallaxLayer } from '@react-spring/parallax'
 import type { NextPage } from 'next'
-import styled, { useTheme } from 'styled-components'
-import Canvas from '../components/Canvas'
+import styled from 'styled-components'
+import Background from '../components/Background'
+import Footer, { FOOTER_HEIGHT } from '../components/footer'
 import { ButtonLink } from '../components/Link'
 import { Title } from '../components/Text'
-import Triangle from '../components/Triangle'
+import TriangleCanvas from '../components/three/TriangleCanvas'
+import Trail from '../components/Trail'
 
 const NotFound: NextPage = () => (
-   <Style>
-      <Box>
-         <Canvas frozen height='30vh' width='100%'>
-            <Triangle theme={useTheme()} />
-         </Canvas>
-         <Title>404 - Not Found</Title>
-         <ButtonLink href='/'>take me home</ButtonLink>
-      </Box>
-   </Style>
+   <>
+      <Parallax pages={1.2}>
+         <Background stars={20} />
+         <ParallaxLayer sticky={{ start: 0, end: 9999 }}>
+            <Trail />
+         </ParallaxLayer>
+         <ParallaxLayer sticky={{ start: 0, end: 9999 }}>
+            <Style>
+               <Box>
+                  <TriangleCanvas height='30vh' width='100%' />
+                  <Title>404 - Not Found</Title>
+                  <ButtonLink href='/'>take me home</ButtonLink>
+               </Box>
+            </Style>
+            <Footer />
+         </ParallaxLayer>
+      </Parallax>
+   </>
 )
 
 const Box = styled.section`
@@ -30,7 +42,7 @@ const Style = styled.section`
    display: grid;
    justify-content: center;
    align-items: center;
-   min-height: 100vh;
+   min-height: calc(100vh - ${FOOTER_HEIGHT});
 `
 
 export default NotFound

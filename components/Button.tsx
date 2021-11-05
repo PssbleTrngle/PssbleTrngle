@@ -14,7 +14,7 @@ export const ButtonStyle = css`
       color: ${p => p.theme.text};
    }
 
-   :focus {
+   :focus-visible {
       box-shadow: 0 0 0 5px ${p => transparentize(0.8, p.theme.primary)};
       outline: 3px solid ${p => p.theme.primary};
    }

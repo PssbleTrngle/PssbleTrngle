@@ -1,6 +1,7 @@
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import { animated, useSpring } from '@react-spring/three'
+import React, { Dispatch, FC, useEffect, useMemo, useRef, useState } from 'react'
 import { DefaultTheme } from 'styled-components'
-import { Mesh, Object3D } from 'three'
+import { Mesh, Object3D, Vector3 } from 'three'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 
 const loader = new OBJLoader()
@@ -17,11 +18,21 @@ function useModel(name: string) {
    return model
 }
 
-const Triangle: FC<{ theme: DefaultTheme }> = ({ theme }) => {
+const Triangle: FC<{
+   theme: DefaultTheme
+   onHover?: Dispatch<boolean>
+}> = ({ theme, onHover }) => {
    const ref = useRef<Mesh>()
    const [hovered, setHover] = useState(false)
 
    const { primary, hover } = theme.triangle
+   const { color, scale } = useSpring({
+      color: hovered ? hover : primary,
+      scale: hovered ? 1 : 1,
+      config: { duration: 100 },
+   })
+
+   useEffect(() => onHover?.(hovered), [hovered, onHover])
 
    const model = useModel('triangle')
    if (!model) return null
@@ -29,13 +40,14 @@ const Triangle: FC<{ theme: DefaultTheme }> = ({ theme }) => {
    const [triangle] = model.children as [Mesh]
 
    return (
-      <mesh
+      <animated.mesh
+         scale={scale.to(x => new Vector3(x, x, x))}
          ref={ref}
          onPointerOver={() => setHover(true)}
          onPointerOut={() => setHover(false)}
          args={[triangle.geometry]}>
-         <meshStandardMaterial attach='material' color={hovered ? hover : primary} />
-      </mesh>
+         <animated.meshStandardMaterial attach='material' color={color} />
+      </animated.mesh>
    )
 }
 

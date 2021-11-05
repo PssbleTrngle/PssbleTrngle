@@ -1,38 +1,12 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC } from 'react'
+import { animated, useSpring } from 'react-spring'
 import styled, { useTheme } from 'styled-components'
 
-function createBlob() {
-   const start = 0
-   const end = 0
-
-   const amount = 6
-   const points = new Array(amount).fill(null).map((_, i) => {
-      const x = Math.random() * 10 + 5 * (i % 2)
-      const y = ((i + 1) / amount) * 100
-      return { x, y }
-   })
-
-   const tangents = points.map((p, i) => {
-      const prev = points[i - 1] ?? { ...p, y: p.y - 10 }
-      const next = points[i + 1] ?? { ...p, y: p.y + 10 }
-   })
-
-   const curves = points.map(({ x, y }, i) => {
-      return `C${x},${y},${x},${y},${x},${y}`
-   })
-
-   return `
-      M100,0
-      L${start},0
-      ${curves.join('')}
-      L${end},100
-      L100,100
-      Z
-   `
-}
+export const SIDEBAR_WIDTH = '600px'
 
 const smallBlob = {
    transform: 'translate(30 20) scale(0.3,0.3)',
+   strokeWidth: 0,
    d: `
       M48.9,-61.8
       C64.1,-56.3,77.5,-42.9,83.2,-26.7
@@ -51,6 +25,7 @@ const smallBlob = {
 
 const bigBlob = {
    transform: 'translate(45 55) scale(1,1)',
+   strokeWidth: 10,
    d: `
       M39.3,-59.2
       C48.9,-47.1,53.2,-32.9,54,-20
@@ -66,48 +41,28 @@ const bigBlob = {
       Z`,
 }
 
-const Sidebar: FC = ({ children }) => {
-   const { sidebar, bg } = useTheme()
-   const [small, setSmall] = useState(false)
-   const blob = useMemo(() => (small ? smallBlob : bigBlob), [small])
-
-   useEffect(() => {
-      const listener = () => setSmall(document.documentElement.scrollTop >= 200)
-      window.addEventListener('scroll', listener)
-      return () => window.removeEventListener('scroll', listener)
-   })
+const Sidebar: FC<{ minimize?: boolean }> = ({ minimize, children }) => {
+   const theme = useTheme()
+   const blob = useSpring(minimize ? smallBlob : bigBlob)
 
    return (
-      <Style>
-         {/*<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-         <path
-            fill={sidebar}
-            d={path}
-         />
-      </svg>*/}
-         <svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
-            <path fill={sidebar} {...blob} />
-         </svg>
+      <>
+         <SVG viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+            <animated.path fill={theme.sidebar} {...blob} />
+         </SVG>
          {children}
-      </Style>
+      </>
    )
 }
 
-const Style = styled.section`
-   position: fixed;
+const SVG = styled.svg`
+   position: absolute;
    height: 100%;
-   grid-area: sidebar;
-   right: 0;
-   width: 600px;
+   filter: drop-shadow(0 0 20px #0002);
+   cursor: none;
 
-   svg {
-      position: absolute;
-      height: 100%;
-      filter: drop-shadow(0 0 20px #0002);
-
-      path {
-         transition: 1s ease;
-      }
+   path {
+      cursor: default;
    }
 `
 

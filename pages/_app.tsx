@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app'
 import { darken } from 'polished'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import '../styles/fonts.css'
 import '../styles/reset.css'
 import dark from '../themes/dark'
 
@@ -15,13 +16,14 @@ function App({ Component, pageProps }: AppProps) {
 
 const Globals = createGlobalStyle`
 
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
-
   body, html {
     background: ${p => p.theme.bg};
     color: ${p => p.theme.text};
     font-family: sans-serif;
-    scroll-behavior: smooth;
+  }
+
+  section {
+    cursor: none;
   }
 
   ::selection {
@@ -29,7 +31,9 @@ const Globals = createGlobalStyle`
   }
 
   ::-webkit-scrollbar {
-    width: auto;
+    width: 0;
+    display: none;
+    opacity: 0;
   }
 
   ::-webkit-scrollbar-track {
