@@ -1,11 +1,11 @@
 import { IParallax, Parallax, ParallaxLayer } from '@react-spring/parallax'
 import { readdirSync, readFileSync } from 'fs'
-import { sample } from 'lodash'
+import { debounce, sample } from 'lodash'
 import type { GetStaticProps, NextPage } from 'next'
 import { basename, join, resolve } from 'path'
 import { mix } from 'polished'
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import yaml from 'yaml'
 import Background from '../components/Background'
 import Button from '../components/Button'
@@ -44,28 +44,40 @@ interface Props {
    subsubtitles: string[]
 }
 const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
-   const theme = useTheme()
    const parallax = useRef<IParallax | null>(null)
    const scrollDown = useCallback(() => parallax.current?.scrollTo(1), [parallax])
 
    const subsubtitle = useMemo(() => sample(subsubtitles), [subsubtitles])
-   const fromMedia = useCallback((e: { matches: boolean }) => (e.matches ? 1.5 : 1) as number, [])
-   const [panelHeight, onResize] = useReducer(
-      (_: number, e: { matches: boolean }) => fromMedia(e),
-      0
-   )
+   const fromMedia = useCallback(() => {
+      const { innerHeight } = window
+      const horizontalPanels = window.matchMedia(`${big}, ${smartphone}`).matches
+      const doublePanels = window.matchMedia(`${big}, ${huge}`).matches
+      const mod = (horizontalPanels ? 2 : 1.2) * (doublePanels ? 1 : 1.5)
+      console.log(mod)
+      return (mod * 300) / innerHeight
+   }, [])
+
+   const [panelHeight, onResize] = useReducer((_: number) => fromMedia(), 0)
 
    const pages = useMemo(
-      () => Math.floor((panels.length / 2) * panelHeight) + 0.5,
+      () => Math.ceil((panels.length * panelHeight + 0.5) * 2) / 2,
       [panels, panelHeight]
    )
+   console.log(panels.length * panelHeight + 0.5, pages)
 
    useEffect(() => {
-      const isSmartphone = window.matchMedia(smartphone)
-      isSmartphone.addEventListener('change', onResize)
-      onResize(isSmartphone)
-      return () => isSmartphone.removeEventListener('change', onResize)
-   }, [])
+      const callback = debounce(onResize, 750)
+      window.addEventListener('resize', callback)
+      onResize()
+      return () => window.removeEventListener('resize', callback)
+   }, [onResize])
+
+   //useEffect(() => {
+   //   const isSmartphone = window.matchMedia(`${big}, ${huge}`)
+   //   isSmartphone.addEventListener('change', onResize)
+   //   onResize(isSmartphone)
+   //   return () => isSmartphone.removeEventListener('change', onResize)
+   //}, [])
 
    const [observed, setObserved] = useState(false)
 
@@ -73,7 +85,7 @@ const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
 
    return (
       <>
-         <Parallax pages={pages} ref={parallax}>
+         <Parallax key={pages} pages={pages} ref={parallax}>
             <Background stars={30} />
 
             <TrailLayer sticky={{ start: 0, end: 9999 }}>

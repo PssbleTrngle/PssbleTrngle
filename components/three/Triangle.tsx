@@ -1,5 +1,5 @@
 import { animated, useSpring } from '@react-spring/three'
-import React, { Dispatch, FC, useEffect, useMemo, useRef, useState } from 'react'
+import React, { Dispatch, FC, memo, useEffect, useMemo, useRef, useState } from 'react'
 import { DefaultTheme } from 'styled-components'
 import { Mesh, Object3D } from 'three'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
@@ -49,4 +49,4 @@ const Triangle: FC<{
    )
 }
 
-export default Triangle
+export default memo(Triangle)

@@ -1,5 +1,5 @@
 import { darken } from 'polished'
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import styled from 'styled-components'
 import Socials from './Socials'
 
@@ -41,4 +41,4 @@ const Style = styled.footer`
       /1fr 10fr 1fr;
 `
 
-export default Footer
+export default memo(Footer)

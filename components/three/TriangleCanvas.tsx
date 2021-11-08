@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, memo, useState } from 'react'
 import { useTheme } from 'styled-components'
 import Canvas, { CanvasProps } from './Canvas'
 import Triangle from './Triangle'
@@ -13,4 +13,4 @@ const TriangleCanvas: FC<CanvasProps> = props => {
    )
 }
 
-export default TriangleCanvas
+export default memo(TriangleCanvas)

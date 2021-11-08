@@ -1,6 +1,6 @@
 import { ParallaxLayer } from '@react-spring/parallax'
 import { transparentize } from 'polished'
-import { FC, useMemo } from 'react'
+import { FC, memo, useMemo } from 'react'
 import styled from 'styled-components'
 import { Offset } from './Panel'
 
@@ -40,4 +40,4 @@ const Style = styled.div<Offset & { opacity: number }>`
    width: fit-content;
 `
 
-export default Background
+export default memo(Background)

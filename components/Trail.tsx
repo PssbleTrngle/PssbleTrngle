@@ -6,8 +6,8 @@ import styled, { keyframes, useTheme } from 'styled-components'
 
 const Trail: FC = () => {
    const [trail, api] = useTrail(5, i => ({
-      x: 0,
-      y: 0,
+      x: 200,
+      y: -100,
       config: i ? config.gentle : { duration: 0 },
    }))
 

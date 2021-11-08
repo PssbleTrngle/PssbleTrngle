@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { lighten } from 'polished'
-import { FC, useMemo, useState } from 'react'
+import { FC, memo, useMemo, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { big, smartphone } from '../styles/media'
 import { ButtonLink } from './Link'
@@ -148,4 +148,4 @@ const Style = styled.div<{ offset: Offset; visible: boolean }>`
    margin-bottom: ${p => `${(p.offset.y < 0 ? 0 : 4) + 1 - p.offset.y}rem`};
 `
 
-export default Panel
+export default memo(Panel)
