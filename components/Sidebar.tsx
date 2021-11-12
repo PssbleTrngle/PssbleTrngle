@@ -1,6 +1,8 @@
-import { FC } from 'react'
+import { createContext, Dispatch, FC, useContext, useState } from 'react'
 import { animated, useSpring } from 'react-spring'
-import styled, { useTheme } from 'styled-components'
+import styled, { css, useTheme } from 'styled-components'
+import { small } from '../styles/media'
+import TriangleCanvas from './three/TriangleCanvas'
 
 export const SIDEBAR_WIDTH = '600px'
 
@@ -41,19 +43,55 @@ const bigBlob = {
       Z`,
 }
 
-const Sidebar: FC<{ minimize?: boolean }> = ({ minimize, children }) => {
+type SidebarPos = 'right' | 'left' | 'top_right' | 'none'
+
+const CTX = createContext<Dispatch<SidebarPos>>(() => console.warn('Sidebar Provider missing'))
+
+export function useSidebar() {
+   return useContext(CTX)
+}
+
+const Sidebar: FC = ({ children }) => {
    const theme = useTheme()
-   const blob = useSpring(minimize ? smallBlob : bigBlob)
+
+   const [pos, set] = useState<SidebarPos>('right')
+   const blob = useSpring(pos === 'right' ? bigBlob : smallBlob)
 
    return (
-      <>
-         <SVG viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
-            <animated.path fill={theme.sidebar} {...blob} />
-         </SVG>
+      <CTX.Provider value={set}>
+         <Style pos={pos}>
+            <SVG viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
+               <animated.path fill={theme.sidebar} {...blob} />
+            </SVG>
+            {pos !== 'left' && <TriangleCanvas height='500px' width='500px' />}
+         </Style>
          {children}
-      </>
+      </CTX.Provider>
    )
 }
+
+const behind = css`
+   z-index: -1;
+`
+
+const Style = styled.div<{ pos?: SidebarPos }>`
+   position: fixed;
+   height: 100%;
+   width: ${SIDEBAR_WIDTH} !important;
+   right: ${p => (p.pos === 'left' ? `calc(100vw - ${SIDEBAR_WIDTH} * 0.8)` : 0)};
+   z-index: 100;
+
+   ${p =>
+      p.pos === 'none' &&
+      css`
+         display: none;
+      `};
+
+   ${p => p.pos === 'left' && behind};
+   @media ${small} {
+      ${behind}
+   }
+`
 
 const SVG = styled.svg`
    position: absolute;

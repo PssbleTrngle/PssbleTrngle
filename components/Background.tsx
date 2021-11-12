@@ -7,7 +7,7 @@ import { Offset } from './Panel'
 const Background: FC<{ stars: number }> = ({ stars }) => (
    <>
       {new Array(stars).fill(null).map((_, i) => (
-         <ParallaxLayer horizontal={i % 2 === 0} key={i} speed={0.1 + i / stars}>
+         <ParallaxLayer key={i} speed={(0.1 + i / stars) * -1}>
             <Layer>
                <Bubble />
             </Layer>

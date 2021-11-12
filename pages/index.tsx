@@ -78,7 +78,6 @@ const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
    return (
       <>
          <Parallax
-            key={pages}
             pages={pages}
             ref={parallax}
             title={
@@ -105,7 +104,7 @@ const Panels = styled.section`
    padding-top: 2rem;
    display: grid;
    grid-template-columns: repeat(1, 1fr);
-   
+
    margin-bottom: auto;
 
    @media ${big}, ${huge} {
