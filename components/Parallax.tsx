@@ -4,9 +4,8 @@ import {
    ParallaxLayer,
    ParallaxProps
 } from '@react-spring/parallax'
-import { FC, ReactNode, Ref, useState } from 'react'
-import styled from 'styled-components'
-import Background from '../components/Background'
+import { forwardRef, ReactNode, useState } from 'react'
+import styled, { StyledConfig } from 'styled-components'
 import Footer from '../components/footer'
 import Observable from '../components/Observable'
 import Sidebar, { SIDEBAR_WIDTH } from '../components/Sidebar'
@@ -14,32 +13,29 @@ import TriangleCanvas from '../components/three/TriangleCanvas'
 import Trail from '../components/Trail'
 import { big, huge, small } from '../styles/media'
 
-const Parallax: FC<
+const Parallax = forwardRef<
+   IParallax | null,
    {
       subpage?: boolean
       title?: ReactNode
-      ref?: Ref<IParallax>
    } & Omit<ParallaxProps, 'title'>
-> = ({ title, children, subpage = false, pages = 1, ...props }) => {
+>(({ title, children, subpage = false, pages = 1, ...props }, ref) => {
    const [observed, setObserved] = useState(false)
 
    return (
-      <ParallaxParent {...props} key={pages} pages={pages}>
-         <Background stars={30} />
-
-         <TrailLayer sticky={{ start: 0, end: 9999 }}>
+      <ParallaxParent {...props} ref={ref} pages={pages}>
+        
+         <TrailLayer sticky={{ start: 0, end: pages }}>
             <Trail />
          </TrailLayer>
 
-         <ParallaxLayer sticky={{ start: 0, end: 0.1 }}>
-            <Content subpage={subpage}>{title}</Content>
-         </ParallaxLayer>
+         <ParallaxLayer sticky={{ start: 0, end: 0.1 }}>{title}</ParallaxLayer>
 
          <ParallaxLayer offset={1.2} factor={pages - 1.2}>
             <Observable onChange={setObserved} />
          </ParallaxLayer>
 
-         <SidebarLayer subpage={subpage} sticky={{ start: 0, end: 9999 }}>
+         <SidebarLayer subpage={subpage} sticky={{ start: 0, end: pages }}>
             <Sidebar minimize={observed}>
                {subpage || <TriangleCanvas height='500px' width='500px' />}
             </Sidebar>
@@ -47,13 +43,13 @@ const Parallax: FC<
 
          <ParallaxLayer factor={pages - 1} offset={1}>
             <Fadeout>
-               <Content subpage={subpage}>{children}</Content>
+               {children}
                <Footer />
             </Fadeout>
          </ParallaxLayer>
       </ParallaxParent>
    )
-}
+})
 
 const Fadeout = styled.section`
    width: 100%;
@@ -65,8 +61,9 @@ const Fadeout = styled.section`
 const TrailLayer = styled(ParallaxLayer)`
    z-index: -1;
 `
+const config: StyledConfig = { shouldForwardProp: p => p !== 'subpage' }
 
-const SidebarLayer = styled(ParallaxLayer)<{ subpage: boolean }>`
+const SidebarLayer = styled(ParallaxLayer).withConfig(config)<{ subpage: boolean }>`
    width: ${SIDEBAR_WIDTH} !important;
    margin-left: ${p => (p.subpage ? 0 : 'auto')};
 
@@ -75,8 +72,7 @@ const SidebarLayer = styled(ParallaxLayer)<{ subpage: boolean }>`
    }
 `
 
-const Content = styled.div<{ subpage: boolean }>`
-   background: red;
+const Content = styled.div.withConfig(config)<{ subpage: boolean }>`
    @media ${big}, ${huge} {
       max-width: 60vw;
       margin-left: ${p => (p.subpage ? 'auto' : 0)};

@@ -5,6 +5,7 @@
       //"@typescript-eslint/no-empty-function": "off",
       //"react-hooks/rules-of-hooks": "error",
       //"react-hooks/exhaustive-deps": "warn",
-      "@next/next/no-document-import-in-page": "off"
+      "@next/next/no-document-import-in-page": "off",
+      "react/display-name": "off"
    }
 }

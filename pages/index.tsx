@@ -4,7 +4,7 @@ import { debounce, sample } from 'lodash'
 import type { GetStaticProps, NextPage } from 'next'
 import { basename, join, resolve } from 'path'
 import { mix } from 'polished'
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react'
 import styled from 'styled-components'
 import yaml from 'yaml'
 import Button from '../components/Button'
@@ -49,7 +49,6 @@ const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
       const horizontalPanels = window.matchMedia(`${big}, ${smartphone}`).matches
       const doublePanels = window.matchMedia(`${big}, ${huge}`).matches
       const mod = (horizontalPanels ? 2 : 1.2) * (doublePanels ? 1 : 1.5)
-      console.log(mod)
       return (mod * 300) / innerHeight
    }, [])
 
@@ -59,7 +58,6 @@ const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
       () => Math.ceil((panels.length * panelHeight + 0.5) * 2) / 2,
       [panels, panelHeight]
    )
-   console.log(panels.length * panelHeight + 0.5, pages)
 
    useEffect(() => {
       const callback = debounce(onResize, 750)
@@ -74,8 +72,6 @@ const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
    //   onResize(isSmartphone)
    //   return () => isSmartphone.removeEventListener('change', onResize)
    //}, [])
-
-   const [observed, setObserved] = useState(false)
 
    if (panelHeight === 0) return null
 
