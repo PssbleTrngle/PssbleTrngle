@@ -1,26 +1,18 @@
 import { IParallax } from '@react-spring/parallax'
-import { readdirSync, readFileSync } from 'fs'
 import { debounce, sample } from 'lodash'
 import type { GetStaticProps, NextPage } from 'next'
-import { basename, join, resolve } from 'path'
 import { mix } from 'polished'
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react'
 import styled from 'styled-components'
-import yaml from 'yaml'
 import Button from '../components/Button'
 import Panel, { PanelData } from '../components/Panel'
 import Parallax from '../components/Parallax'
 import { SIDEBAR_WIDTH } from '../components/Sidebar'
+import parseYAML from '../lib/static'
 import { big, huge, smartphone } from '../styles/media'
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-   const folder = resolve('panels')
-   const files = readdirSync(folder).map(f => join(folder, f))
-
-   const panels: PanelData[] = files.map(file => {
-      const content = readFileSync(file).toString()
-      return { ...yaml.parse(content), key: basename(file) }
-   })
+   const panels = parseYAML<PanelData>('panels')
 
    const subsubtitles = [
       'parttime garlic bread enthusiast',

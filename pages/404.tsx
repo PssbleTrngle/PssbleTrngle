@@ -10,7 +10,7 @@ import TriangleCanvas from '../components/three/TriangleCanvas'
 
 const NotFound: NextPage = () => (
    <>
-      <Head title='404' />
+      <Head title='404' sidebar='none' />
       <Parallax pages={1.2}>
          <Background stars={20} />
          <ParallaxLayer sticky={{ start: 0, end: 9999 }}>

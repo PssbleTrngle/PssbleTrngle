@@ -1,31 +1,30 @@
-import type { NextPage } from 'next'
-import { useEffect, useMemo } from 'react'
+import { DateTime } from 'luxon'
+import type { GetStaticProps, NextPage } from 'next'
+import { darken } from 'polished'
+import { useMemo } from 'react'
 import styled from 'styled-components'
 import Head from '../components/Head'
-import { useSidebar } from '../components/Sidebar'
+import { PanelData } from '../components/Panel'
 import { Title } from '../components/Text'
+import Time from '../components/Time'
 import Timeline, { Point } from '../components/Timeline'
+import parseYAML from '../lib/static'
 
-const panels = [
-   {
-      title: 'Birth',
-      text: 'I was born and raised in the jungle, where sticks and stones served as my only nourishment',
-   },
-   {
-      title: 'Birth',
-      text: 'I was born and raised in the jungle, where sticks and stones served as my only nourishment',
-   },
-   {
-      title: 'Birth',
-      text: 'I was born and raised in the jungle, where sticks and stones served as my only nourishment',
-   },
-   {
-      title: 'Birth',
-      text: 'I was born and raised in the jungle, where sticks and stones served as my only nourishment',
-   },
-]
+interface Props {
+   panels: PanelData[]
+}
 
-const CV: NextPage = () => {
+export const getStaticProps: GetStaticProps<Props> = async () => {
+   const panels = parseYAML<PanelData>('timeline').sort((a, b) => {
+      const [ta, tb] = [a, b].map(({ time }) => time?.[0] && DateTime.fromObject(time[0]))
+      if (!ta || !tb) return 0
+      return ta.diff(tb).toMillis()
+   })
+
+   return { props: { panels } }
+}
+
+const CV: NextPage<Props> = ({ panels }) => {
    const timeline = useMemo(
       () =>
          panels.map((p, i) => {
@@ -35,18 +34,16 @@ const CV: NextPage = () => {
       [panels]
    )
 
-   const setSidebar = useSidebar()
-   useEffect(() => setSidebar('none'), [setSidebar])
-
    return (
       <>
-         <Head title='CV' />
+         <Head title='CV' sidebar='left' />
          <PageTitle>Curriculum Vitae</PageTitle>
-         <Wrapper>
+         <Wrapper size={timeline.length}>
             <Timeline points={timeline} />
-            {timeline.map(({ title, text, key, ...point }) => (
+            {timeline.map(({ title, text, key, time, ...point }) => (
                <Panel key={key} {...point}>
                   <h3>{title}</h3>
+                  {time && <Time dates={time} />}
                   <p>{text}</p>
                </Panel>
             ))}
@@ -55,23 +52,28 @@ const CV: NextPage = () => {
    )
 }
 
-const Wrapper = styled.section`
+const Wrapper = styled.div<{ size: number }>`
    position: relative;
-   min-height: 1000px;
+   min-height: ${p => 300 * p.size}px;
+   margin-top: 150px;
 `
 
 const Panel = styled.div<Point>`
    position: absolute;
    left: ${p => 50 + p.x}%;
    top: ${p => p.y}px;
-   transform: translateX(-50%);
+   transform: translate(-50%, -50%);
+   cursor: default;
 
-   background: #0001;
+   display: grid;
+   gap: 1rem;
+
+   background: ${p => darken(0.05, p.theme.bg)};
    padding: 2rem;
 `
 
 const PageTitle = styled(Title)`
-   padding: 2rem 0;
+   margin-bottom: 2rem;
 `
 
 export default CV

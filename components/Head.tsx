@@ -1,8 +1,14 @@
 import NextHead from 'next/head'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
+import { SidebarPos, useSidebar } from './Sidebar'
 
-const Head: FC<{ title?: string }> = ({ title }) => {
+const Head: FC<{ title?: string; sidebar?: SidebarPos }> = ({ title, sidebar }) => {
    const fullTitle = 'Niklas Widmann' + (title ? ` - ${title}` : '')
+
+   const setSidebar = useSidebar()
+   useEffect(() => {
+      if (sidebar) setSidebar(sidebar)
+   }, [sidebar, setSidebar])
 
    return (
       <NextHead>

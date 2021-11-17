@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, Fragment, useMemo } from 'react'
 import styled from 'styled-components'
 
 export interface Point {
@@ -11,18 +11,17 @@ const Timeline: FC<{ points: Point[] }> = ({ points }) => {
 
    return (
       <Style>
-         {points.map(({ x, y }, i) => (
-            <circle key={i} cx={`${50 + x}%`} cy={y} r={3} fill='#FFF' />
-         ))}
          {lines.map(([p1, p2], i) => (
-            <Line
-               key={i}
-               x1={`${50 + p1.x}%`}
-               x2={`${50 + p2.x}%`}
-               y1={p1.y}
-               y2={p2.y}
-               stroke='#FFF'
-            />
+            <Fragment key={i}>
+               <circle key={i} cx={`${50 + p2.x}%`} cy={p2.y - 80} r={3} fill='#FFF' />
+               <Line
+                  x1={`${50 + p1.x}%`}
+                  x2={`${50 + p2.x}%`}
+                  y1={p1.y + 80}
+                  y2={p2.y - 80}
+                  stroke='#FFF'
+               />
+            </Fragment>
          ))}
       </Style>
    )
