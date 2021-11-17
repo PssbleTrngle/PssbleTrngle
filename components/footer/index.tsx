@@ -10,7 +10,7 @@ const Footer: FC = () => {
    return (
       <Style>
          <span />
-         <Copyright>&copy; All rights included</Copyright>
+         <Copyright>&copy; all rights reserved</Copyright>
          <Socials />
       </Style>
    )

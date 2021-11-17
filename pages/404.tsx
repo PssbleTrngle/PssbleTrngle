@@ -7,16 +7,12 @@ import Head from '../components/Head'
 import { ButtonLink } from '../components/Link'
 import { Title } from '../components/Text'
 import TriangleCanvas from '../components/three/TriangleCanvas'
-import Trail from '../components/Trail'
 
 const NotFound: NextPage = () => (
    <>
-      <Head title='404' />
+      <Head title='404' sidebar='none' />
       <Parallax pages={1.2}>
          <Background stars={20} />
-         <ParallaxLayer sticky={{ start: 0, end: 9999 }}>
-            <Trail />
-         </ParallaxLayer>
          <ParallaxLayer sticky={{ start: 0, end: 9999 }}>
             <Style>
                <Box>

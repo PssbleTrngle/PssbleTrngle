@@ -62,6 +62,9 @@ const animate = keyframes`
 const Style = styled.div`
    height: 100%;
    width: 100%;
+   position: fixed;
+   z-index: 0;
+   pointer-events: none;
 
    & > div {
       position: absolute;

@@ -1,3 +1,4 @@
+import { DateObjectUnits } from 'luxon'
 import Image from 'next/image'
 import { lighten } from 'polished'
 import { FC, memo, useMemo, useState } from 'react'
@@ -5,6 +6,7 @@ import styled, { css } from 'styled-components'
 import { big, smartphone } from '../styles/media'
 import { ButtonLink } from './Link'
 import Observable from './Observable'
+import Time from './Time'
 
 export interface PanelData {
    image?: string
@@ -12,6 +14,7 @@ export interface PanelData {
    title?: string
    link?: string
    key: string
+   time?: DateObjectUnits[]
 }
 
 const LOREM =
@@ -32,7 +35,7 @@ export function useOffset(): Offset {
    )
 }
 
-const Panel: FC<PanelData> = ({ children, image, text = LOREM, title, link }) => {
+const Panel: FC<PanelData> = ({ children, image, time, text = LOREM, title, link }) => {
    const offset = useOffset()
    const [visible, setVisible] = useState(false)
 
@@ -53,6 +56,7 @@ const Panel: FC<PanelData> = ({ children, image, text = LOREM, title, link }) =>
                   </ButtonLink>
                )}
                {children}
+               {time && <Time dates={time} />}
             </Text>
          </Observable>
       </Style>
