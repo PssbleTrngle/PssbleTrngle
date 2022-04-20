@@ -1,4 +1,4 @@
-<table border="0">
+<table align="center" border="0">
   <tr>
     <td border="none" rowspan="3" width="324">
       <img src="https://raw.githubusercontent.com/PssbleTrngle/PssbleTrngle/main/public/images/impossible_river.svg" />
