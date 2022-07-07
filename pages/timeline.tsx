@@ -28,7 +28,7 @@ const CV: NextPage<Props> = ({ panels }) => {
    const timeline = useMemo(
       () =>
          panels.map((p, i) => {
-            const point = { x: Math.random() * 10 - 5, y: i * 300 }
+            const point = { x: Math.random() * 10 - 5, y: i * 250 }
             return { ...p, ...point, key: i }
          }),
       [panels]
