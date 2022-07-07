@@ -1,4 +1,4 @@
-import { createContext, Dispatch, FC, useContext, useMemo, useState } from 'react'
+import { createContext, Dispatch, FC, Suspense, useContext, useMemo, useState } from 'react'
 import { animated, useSpring } from 'react-spring'
 import styled, { css, useTheme } from 'styled-components'
 import { small } from '../styles/media'
@@ -96,7 +96,7 @@ const Sidebar: FC = ({ children }) => {
             </SVG>
             <TriangleCanvas height='500px' width='500px' />
          </Style>
-         {children}
+         <Suspense fallback={<p>...</p>}>{children}</Suspense>
       </CTX.Provider>
    )
 }
@@ -117,7 +117,7 @@ const Style = styled.div<{ pos?: SidebarPos }>`
 
    ${p => p.pos === 'none' && `display: none`};
    ${p => p.pos === 'left' && behind};
-   
+
    @media ${small} {
       ${behind}
    }
