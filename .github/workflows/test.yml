@@ -17,6 +17,6 @@ jobs:
               restore-keys: |
                  ${{ runner.os }}-node-modules-
 
-         - run: npm install
+         - run: yarn install
 
-         - run: npm test
+         - run: yarn test
