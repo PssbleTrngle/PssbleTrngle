@@ -8,7 +8,7 @@ import Button from '../components/Button'
 import Panel, { PanelData } from '../components/Panel'
 import Parallax from '../components/Parallax'
 import { SIDEBAR_WIDTH } from '../components/Sidebar'
-import parseYAML from '../lib/static'
+import parseYAML from '../static'
 import { big, huge, smartphone } from '../styles/media'
 
 export const getStaticProps: GetStaticProps<Props> = async () => {

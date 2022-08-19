@@ -8,7 +8,7 @@ import { PanelData } from '../components/Panel'
 import { Title } from '../components/Text'
 import Time from '../components/Time'
 import Timeline, { Point } from '../components/Timeline'
-import parseYAML from '../lib/static'
+import parseYAML from '../static'
 
 interface Props {
    panels: PanelData[]

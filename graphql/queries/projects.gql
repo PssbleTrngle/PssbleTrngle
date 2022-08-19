@@ -1,0 +1,54 @@
+fragment Content on DraftIssue {
+   title
+}
+
+fragment Select on ProjectV2ItemFieldSingleSelectValue {
+   name
+   optionId
+}
+
+fragment Text on ProjectV2ItemFieldTextValue {
+   text
+}
+
+fragment Item on ProjectV2Item {
+   id
+   content {
+      __typename
+      ...Content
+   }
+   status: fieldValueByName(name: "Status") {
+      __typename
+      ...Select
+   }
+   type: fieldValueByName(name: "Type") {
+      __typename
+      ...Select
+   }
+   size: fieldValueByName(name: "Size") {
+      __typename
+      ...Select
+   }
+   link: fieldValueByName(name: "Link") {
+      __typename
+      ...Text
+   }
+}
+
+fragment Project on ProjectV2 {
+   title
+   items(first: 100) {
+      totalCount
+      nodes {
+         ...Item
+      }
+   }
+}
+
+query getProjects {
+   viewer {
+      projectV2(number: 10) {
+         ...Project
+      }
+   }
+}

@@ -6,7 +6,7 @@ import Sidebar from '../components/Sidebar'
 import Trail from '../components/Trail'
 import '../styles/fonts.css'
 import '../styles/reset.css'
-import dark from '../themes/dark'
+import dark from '../styles/themes/dark'
 
 function App({ Component, pageProps }: AppProps) {
    return (
