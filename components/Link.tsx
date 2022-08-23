@@ -23,7 +23,12 @@ const Style = styled.a<StyleProps>`
 
 const Link: FC<LinkProps & Partial<StyleProps>> = ({ children, newTab, href, as, ...props }) =>
    newTab ? (
-      <Style underline='hover' target='_blank' rel='noopener noreferrer' href={href.toString()} {...props}>
+      <Style
+         underline='hover'
+         target='_blank'
+         rel='noopener noreferrer'
+         href={href.toString()}
+         {...props}>
          {children}
       </Style>
    ) : (

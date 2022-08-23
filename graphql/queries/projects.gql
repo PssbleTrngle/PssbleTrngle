@@ -11,6 +11,11 @@ fragment Text on ProjectV2ItemFieldTextValue {
    text
 }
 
+fragment Field on ProjectV2ItemFieldValue {
+   ...Text
+   ...Select
+}
+
 fragment Item on ProjectV2Item {
    id
    content {
@@ -19,19 +24,19 @@ fragment Item on ProjectV2Item {
    }
    status: fieldValueByName(name: "Status") {
       __typename
-      ...Select
+      ...Field
    }
    type: fieldValueByName(name: "Type") {
       __typename
-      ...Select
+      ...Field
    }
    size: fieldValueByName(name: "Size") {
       __typename
-      ...Select
+      ...Field
    }
    link: fieldValueByName(name: "Link") {
       __typename
-      ...Text
+      ...Field
    }
 }
 
@@ -46,6 +51,14 @@ fragment Project on ProjectV2 {
 }
 
 query getProjects {
+   viewer {
+      projectV2(number: 10) {
+         ...Project
+      }
+   }
+}
+
+query getActiveProjects {
    viewer {
       projectV2(number: 10) {
          ...Project

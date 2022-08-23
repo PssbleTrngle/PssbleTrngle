@@ -1,76 +1,129 @@
+import { groupBy, omit, uniqBy } from 'lodash'
 import type { GetStaticProps, NextPage } from 'next'
-import { FC, useMemo } from 'react'
+import { useRouter } from 'next/router'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
+import Button from '../components/Button'
 import Head from '../components/Head'
+import ProjectCard, { ProjectItemFragment } from '../components/ProjectCard'
 import { Title } from '../components/Text'
-import type { ItemFragment } from '../graphql/generated'
 import { getProjects } from '../graphql/github'
 
-interface Props {
-   activeProjects: ItemFragment[]
+export const enum ProjectStatus {
+   IDEA = 'f75ad846',
+   STASH = '21158e35',
+   OUTDATED = '3d980afb',
+   INTEREST = '47fc9ee4',
+   IN_PROGRESS = '0c5cfdc4',
+   DONE = '98236657',
+   ABANDONED = '2fd07228',
 }
 
-const showStatuses = ['0c5cfdc4']
+const shownStatuses: string[] = [
+   ProjectStatus.OUTDATED,
+   ProjectStatus.INTEREST,
+   ProjectStatus.IN_PROGRESS,
+]
+
+interface Props {
+   projects: ProjectItemFragment[]
+}
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-   const projects = await getProjects()
-   const activeProjects =
-      (projects.items.nodes?.filter(
-         it =>
-            it?.status?.__typename === 'ProjectV2ItemFieldSingleSelectValue' &&
-            showStatuses.includes(it.status.optionId ?? '')
-      ) as ItemFragment[]) ?? []
-   return { props: { activeProjects } }
-}
+   const project = await getProjects()
+   const projects = project.items.nodes as ProjectItemFragment[]
 
-const Field: FC<{ value?: ItemFragment['status'] }> = ({ value }) => {
-   if (value?.__typename !== 'ProjectV2ItemFieldSingleSelectValue') return null
-   return <span>{value.name}</span>
-}
-
-const Project: FC<ItemFragment> = ({ content, size, type, link }) => {
-   const title = useMemo(
-      () => (content?.__typename === 'DraftIssue' ? content.title : '???'),
-      [content]
-   )
-
-   const url = useMemo(
-      () => (link?.__typename === 'ProjectV2ItemFieldTextValue' ? link.text : undefined),
-      [link]
-   )
-
-   const inner = (
-      <>
-         {title} <Field value={size} /> <Field value={type} />
-      </>
-   )
-
-   if (url)
-      return (
-         <a href={`https://github.com/${url}`}>
-            <p>{inner}</p>
-         </a>
+   const filtered = projects
+      .filter(it => it.status?.optionId !== ProjectStatus.ABANDONED)
+      .map(it =>
+         shownStatuses.includes(it.status?.optionId ?? '')
+            ? it
+            : omit(it, ['type', 'status', 'size', 'link'])
       )
-   return <p>{inner}</p>
+
+   return { props: { projects: filtered } }
 }
 
-const Projects: NextPage<Props> = ({ activeProjects }) => {
+const Projects: NextPage<Props> = ({ projects }) => {
+   const { query, push, pathname } = useRouter()
+   const chaos = query['ordered'] === undefined
+   const order = useCallback(() => push({ pathname, query: { ordered: true } }), [])
+
+   const shown = useMemo(() => {
+      if (chaos) return projects
+      return projects.filter(it => !!it.status)
+   }, [chaos, projects])
+
+   const columnCount = useMemo(() => uniqBy(shown, it => it.status?.optionId).length, [shown])
+   const byStatus = useMemo(() => groupBy(shown, it => it.status?.optionId), [shown])
+
+   const placeOf = useCallback(
+      (item: ProjectItemFragment) => {
+         if (chaos) return misplaced()
+         const option = item.status?.optionId!
+         const row = byStatus[option].indexOf(item)
+         const column = shownStatuses.indexOf(option)
+         return { rotation: 0, x: (column - Math.floor(columnCount / 2)) * 330, y: row * 100 }
+      },
+      [chaos, columnCount, byStatus]
+   )
+
+   const cards = useMemo(
+      () =>
+         shown.map(item => {
+            return (
+               <Placed key={item.id} {...placeOf(item)}>
+                  <ProjectCard hideLabels={chaos} {...item} />
+               </Placed>
+            )
+         }),
+      [chaos, shown, placeOf]
+   )
+
    return (
       <>
          <Head title='Projects' sidebar='left' />
          <Title>Projects</Title>
          <Wrapper>
-            {activeProjects.map(item => (
-               <Project key={item.id} {...item} />
-            ))}
+            {chaos && <Button onClick={order}>Order</Button>}
+            <Cards>{cards}</Cards>
          </Wrapper>
       </>
    )
 }
 
-const Wrapper = styled.div`
+const Cards = styled.div`
    position: relative;
+   margin-top: 2rem;
+   width: 1200px;
+   max-width: 100vw;
+`
+
+const misplaced = (): Place => ({
+   rotation: Math.random() * 30 - 15,
+   x: Math.random() * 300 - 150,
+   y: Math.random() * 300,
+})
+
+interface Place {
+   rotation: number
+   x: number
+   y: number
+}
+
+const Placed = styled.div<Place>`
+   transform: rotate(${p => p.rotation}deg) translateX(-50%);
+   top: ${p => p.y}px;
+   left: calc(${p => p.x}px + 50%);
+   position: absolute;
+   transition: left 0.2s ease, top 0.2s ease;
+   //box-shadow: 0 0 0 5px #0002;
+`
+
+const Wrapper = styled.div`
    margin-top: 150px;
+   display: grid;
+   justify-content: center;
 `
 
 export default Projects
