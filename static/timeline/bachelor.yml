@@ -1,9 +1,8 @@
-title: Bachelor Thesis
+title: Bachelor Thesis • Bosch GmbH
 time:
    - year: 2021
      month: 1
    - year: 2021
      month: 9
-text: |
-   Bosch GmbH
+text:
    Developing a three-dimensional Visualization of CI/CD-Data for Grafana

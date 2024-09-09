@@ -1,5 +1,16 @@
-import { createContext, Dispatch, FC, Suspense, useContext, useMemo, useState } from 'react'
-import { animated, useSpring } from 'react-spring'
+'use client'
+
+import { animated, useSpring } from '@react-spring/web'
+import {
+   createContext,
+   Dispatch,
+   FC,
+   PropsWithChildren,
+   Suspense,
+   useContext,
+   useMemo,
+   useState,
+} from 'react'
 import styled, { css, useTheme } from 'styled-components'
 import { small } from '../styles/media'
 import TriangleCanvas from './three/TriangleCanvas'
@@ -71,7 +82,7 @@ export function useSidebar() {
    return useContext(CTX)
 }
 
-const Sidebar: FC = ({ children }) => {
+const Sidebar: FC<PropsWithChildren> = ({ children }) => {
    const theme = useTheme()
 
    const [pos, set] = useState<SidebarPos>('right')
@@ -90,7 +101,7 @@ const Sidebar: FC = ({ children }) => {
 
    return (
       <CTX.Provider value={set}>
-         <Style pos={pos}>
+         <Style $pos={pos}>
             <SVG viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
                <animated.path fill={theme.sidebar} {...props} />
             </SVG>
@@ -105,18 +116,20 @@ const behind = css`
    z-index: 0;
 `
 
-const Style = styled.div<{ pos?: SidebarPos }>`
+const Style = styled.div<{ $pos?: SidebarPos }>`
    position: fixed;
    height: 100%;
    width: ${SIDEBAR_WIDTH} !important;
-   transition: left 0.5s ease, top 0.5s ease;
-   top: ${p => (p.pos === 'left' ? `calc(${SIDEBAR_WIDTH} * -0.2)` : 0)};
+   transition:
+      left 0.5s ease,
+      top 0.5s ease;
+   top: ${p => (p.$pos === 'left' ? `calc(${SIDEBAR_WIDTH} * -0.2)` : 0)};
    left: ${p =>
-      p.pos === 'left' ? `calc(${SIDEBAR_WIDTH} * -0.2)` : `calc(100vw - ${SIDEBAR_WIDTH})`};
+      p.$pos === 'left' ? `calc(${SIDEBAR_WIDTH} * -0.2)` : `calc(100vw - ${SIDEBAR_WIDTH})`};
    z-index: 100;
 
-   ${p => p.pos === 'none' && `display: none`};
-   ${p => p.pos === 'left' && behind};
+   ${p => p.$pos === 'none' && `display: none`};
+   ${p => p.$pos === 'left' && behind};
 
    @media ${small} {
       ${behind}

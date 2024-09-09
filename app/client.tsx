@@ -1,6 +1,8 @@
+'use client'
+
 import { IParallax } from '@react-spring/parallax'
 import { debounce, sample } from 'lodash'
-import type { GetStaticProps, NextPage } from 'next'
+import type { NextPage } from 'next'
 import { mix } from 'polished'
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react'
 import styled from 'styled-components'
@@ -8,30 +10,12 @@ import Button from '../components/Button'
 import Panel, { PanelData } from '../components/Panel'
 import Parallax from '../components/Parallax'
 import { SIDEBAR_WIDTH } from '../components/Sidebar'
-import parseYAML from '../lib/static'
 import { big, huge, smartphone } from '../styles/media'
 
-export const getStaticProps: GetStaticProps<Props> = async () => {
-   const panels = parseYAML<PanelData>('panels')
-
-   const subsubtitles = [
-      'parttime garlic bread enthusiast',
-      'hardcore gamer',
-      'entitled react enthusiast',
-      'cauliflower enjoyer',
-      'hobby picnicker',
-      'SSO supporter',
-      'Wannabe Fullstack Developer',
-   ]
-
-   return { props: { panels, subsubtitles } }
-}
-
-interface Props {
+const HomeClient: NextPage<{
    panels: PanelData[]
    subsubtitles: string[]
-}
-const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
+}> = ({ panels, subsubtitles }) => {
    const parallax = useRef<IParallax | null>(null)
    const scrollDown = useCallback(() => parallax.current?.scrollTo(1), [parallax])
 
@@ -48,7 +32,7 @@ const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
 
    const pages = useMemo(
       () => Math.ceil((panels.length * panelHeight + 0.5) * 2) / 2,
-      [panels, panelHeight]
+      [panels, panelHeight],
    )
 
    useEffect(() => {
@@ -82,8 +66,8 @@ const Home: NextPage<Props> = ({ panels, subsubtitles }) => {
                </Title>
             }>
             <Panels>
-               {panels.map(props => (
-                  <Panel {...props} key={props.key} />
+               {panels.map((props, i) => (
+                  <Panel {...props} key={i} />
                ))}
             </Panels>
          </Parallax>
@@ -137,4 +121,4 @@ const Title = styled.section`
    }
 `
 
-export default Home
+export default HomeClient

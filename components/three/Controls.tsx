@@ -1,6 +1,6 @@
-import { AnimationResult, config, SpringValue, useSpring } from '@react-spring/core'
+import { AnimationResult, config, SpringValue, useSpring } from '@react-spring/web'
 import { extend, useFrame, useThree } from '@react-three/fiber'
-import React, { Dispatch, FC, useCallback, useEffect, useRef, useState } from 'react'
+import { Dispatch, FC, useCallback, useEffect, useRef, useState } from 'react'
 import { Event, Vector3 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
@@ -24,7 +24,7 @@ function useEvent<S, C>(
       | undefined
       | null,
    s: S,
-   listener: C
+   listener: C,
 ) {
    useEffect(() => {
       if (v) {
@@ -51,7 +51,7 @@ const Controls: FC<{
          camera.position.set(...value.pos)
          camera.quaternion.set(...value.quat)
       },
-      [camera, controls]
+      [camera, controls],
    )
 
    const [moving, setMoving] = useState(false)

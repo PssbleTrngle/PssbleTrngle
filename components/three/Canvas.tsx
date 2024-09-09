@@ -1,5 +1,5 @@
 import { Canvas as BaseCanvas } from '@react-three/fiber'
-import React, { FC, ReactText, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { Quaternion, Vector3 } from 'three'
 import { useDebouncedCallback } from 'use-debounce'
@@ -20,20 +20,20 @@ function usePolygon(points: number, rand = 0) {
 }
 
 export interface CanvasProps {
-   height?: ReactText
-   width?: ReactText
+   height?: string | number
+   width?: string | number
    frozen?: boolean
-   hovered?: boolean
+   $hovered?: boolean
 }
 
-const Canvas: FC<CanvasProps> = ({ children, frozen, ...props }) => {
+const Canvas: FC<PropsWithChildren<CanvasProps>> = ({ children, frozen, ...props }) => {
    const div = useRef<HTMLDivElement>(null)
    const [zoom, setZoom] = useState(20)
    const [grabbed, setGrabbed] = useState(false)
 
    const updateZoom = useDebouncedCallback(
       () => setZoom((div.current?.offsetHeight ?? 500) / 25),
-      100
+      100,
    )
 
    useEffect(() => {
@@ -42,7 +42,7 @@ const Canvas: FC<CanvasProps> = ({ children, frozen, ...props }) => {
    })
 
    return (
-      <Style {...props} ref={div} grabbed={grabbed}>
+      <Style {...props} ref={div} $grabbed={grabbed}>
          <BaseCanvas
             orthographic
             camera={{
@@ -50,8 +50,8 @@ const Canvas: FC<CanvasProps> = ({ children, frozen, ...props }) => {
                position: new Vector3(...INITIAL.pos),
                quaternion: new Quaternion(...INITIAL.quat),
             }}>
-            <ambientLight />
-            <pointLight position={[5, -10, 8]} />
+            <ambientLight intensity={Math.PI / 2} />
+            <pointLight position={[-5, -10, 12]} decay={0} intensity={Math.PI} />
             {children}
             <Controls onMoving={setGrabbed} enabled={!frozen} zoom={zoom} />
          </BaseCanvas>
@@ -59,13 +59,13 @@ const Canvas: FC<CanvasProps> = ({ children, frozen, ...props }) => {
    )
 }
 
-const Style = styled.div<Partial<CanvasProps> & { grabbed?: boolean }>`
+const Style = styled.div<Partial<CanvasProps> & { $grabbed?: boolean }>`
    height: ${p => p.height};
    width: ${p => p.width};
-   
+
    cursor: default;
-   ${p => p.hovered && 'cursor: grab'};
-   ${p => p.grabbed && 'cursor: grabbing'};
+   ${p => p.$hovered && 'cursor: grab'};
+   ${p => p.$grabbed && 'cursor: grabbing'};
 `
 
 export default Canvas

@@ -1,3 +1,5 @@
+'use client'
+
 import NextHead from 'next/head'
 import { FC, useEffect } from 'react'
 import { SidebarPos, useSidebar } from './Sidebar'

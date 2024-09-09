@@ -1,5 +1,5 @@
 import NextLink, { LinkProps } from 'next/link'
-import { FC } from 'react'
+import { FC, PropsWithChildren } from 'react'
 import styled, { css } from 'styled-components'
 import { ButtonStyle } from './Button'
 
@@ -8,7 +8,7 @@ interface StyleProps {
    newTab?: boolean
 }
 
-const Style = styled.a<StyleProps>`
+const Style = styled(NextLink)<StyleProps>`
    text-decoration: ${p => (p.underline === 'always' ? 'underline' : 'none')};
    color: ${p => p.theme.text};
    cursor: pointer;
@@ -21,17 +21,21 @@ const Style = styled.a<StyleProps>`
       `}
 `
 
-const Link: FC<LinkProps & Partial<StyleProps>> = ({ children, newTab, href, as, ...props }) =>
+const Link: FC<PropsWithChildren<LinkProps & Partial<StyleProps>>> = ({
+   children,
+   newTab,
+   href,
+   as,
+   ...props
+}) =>
    newTab ? (
-      <Style underline='hover' target='_blank' rel='noopener noreferrer' href={href.toString()} {...props}>
+      <Style underline='hover' target='_blank' rel='noopener noreferrer' href={href} {...props}>
          {children}
       </Style>
    ) : (
-      <NextLink {...props} href={href} passHref>
-         <Style underline='hover' {...props}>
-            {children}
-         </Style>
-      </NextLink>
+      <Style underline='hover' href={href} {...props}>
+         {children}
+      </Style>
    )
 
 export const ButtonLink = styled(Link)`

@@ -13,7 +13,6 @@ export interface PanelData {
    text?: string
    title?: string
    link?: string
-   key: string
    time?: DateObjectUnits[]
 }
 
@@ -31,7 +30,7 @@ export function useOffset(): Offset {
          x: (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1),
          y: (Math.random() * 2 + 1) * (Math.random() > 0.5 ? 1 : -1),
       }),
-      []
+      [],
    )
 }
 
@@ -40,7 +39,7 @@ const Panel: FC<PanelData> = ({ children, image, time, text = LOREM, title, link
    const [visible, setVisible] = useState(false)
 
    return (
-      <Style visible={visible} offset={offset}>
+      <Style $visible={visible} $offset={offset}>
          <Observable onChange={setVisible}>
             {image && (
                <ImageBox offset={offset}>
@@ -133,7 +132,7 @@ const Text = styled.div<{ offset?: Offset }>`
    gap: 1rem;
 `
 
-const Style = styled.div<{ offset: Offset; visible: boolean }>`
+const Style = styled.div<{ $offset: Offset; $visible: boolean }>`
    ${Box};
    cursor: default;
    position: relative;
@@ -142,14 +141,16 @@ const Style = styled.div<{ offset: Offset; visible: boolean }>`
    //margin: 2rem 3rem;
    //margin-bottom: 4rem;
 
-   transition: transform 1s ease, opacity 0.2s linear;
-   transform: translateY(${p => (p.visible ? 0 : 20)}%);
-   opacity: ${p => (p.visible ? 1 : 0)};
+   transition:
+      transform 1s ease,
+      opacity 0.2s linear;
+   transform: translateY(${p => (p.$visible ? 0 : 20)}%);
+   opacity: ${p => (p.$visible ? 1 : 0)};
 
-   margin-left: ${p => `${(p.offset.x < 0 ? 0 : 4) + 1 - p.offset.x}rem`};
-   margin-right: ${p => `${(p.offset.x > 0 ? 0 : 4) + 1 + p.offset.x}rem`};
-   margin-top: ${p => `${(p.offset.y > 0 ? 0 : 4) + 1 + p.offset.y}rem`};
-   margin-bottom: ${p => `${(p.offset.y < 0 ? 0 : 4) + 1 - p.offset.y}rem`};
+   margin-left: ${p => `${(p.$offset.x < 0 ? 0 : 4) + 1 - p.$offset.x}rem`};
+   margin-right: ${p => `${(p.$offset.x > 0 ? 0 : 4) + 1 + p.$offset.x}rem`};
+   margin-top: ${p => `${(p.$offset.y > 0 ? 0 : 4) + 1 + p.$offset.y}rem`};
+   margin-bottom: ${p => `${(p.$offset.y < 0 ? 0 : 4) + 1 - p.$offset.y}rem`};
 `
 
 export default memo(Panel)

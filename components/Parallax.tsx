@@ -1,7 +1,9 @@
+'use client'
+
 import {
    IParallax,
-   Parallax as ParallaxParent,
    ParallaxLayer,
+   Parallax as ParallaxParent,
    ParallaxProps
 } from '@react-spring/parallax'
 import { forwardRef, ReactNode, useCallback, useEffect } from 'react'

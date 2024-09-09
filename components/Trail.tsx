@@ -1,24 +1,27 @@
-import { config, SpringValue, useTrail } from '@react-spring/core'
-import { animated } from '@react-spring/web'
+'use client'
+
+import { animated, config, SpringValue, useTrail } from '@react-spring/web'
 import { lighten, mix } from 'polished'
 import { FC, useCallback, useEffect } from 'react'
-import styled, { keyframes, useTheme } from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
-const Trail: FC = () => {
+export default function Trail() {
    const [trail, api] = useTrail(5, i => ({
-      x: 200,
-      y: -100,
-      config: i ? config.gentle : { duration: 0 },
+      from: {
+         x: 200,
+         y: -100,
+      },
    }))
 
    const mouseMove = useCallback(
       (e: MouseEvent) => {
-         api.start({
+         api.start(i => ({
             x: e.clientX,
             y: e.clientY,
-         })
+            config: i ? config.gentle : { duration: 0 },
+         }))
       },
-      [api]
+      [api],
    )
 
    useEffect(() => {
@@ -28,7 +31,7 @@ const Trail: FC = () => {
 
    return (
       <Style>
-         {[...trail].reverse().map((props, i) => (
+         {trail.toReversed().map((props, i) => (
             <Pointer key={i} size={(i + 1) / trail.length} {...props} />
          ))}
       </Style>
@@ -40,7 +43,6 @@ const Pointer: FC<{
    y: SpringValue<number>
    size: number
 }> = ({ x, y, size }) => {
-   const theme = useTheme()
    return (
       <animated.div
          style={{
@@ -82,5 +84,3 @@ const Style = styled.div`
       }
    }
 `
-
-export default Trail
