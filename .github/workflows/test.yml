@@ -1,22 +1,38 @@
 name: Test
-
-on: [push]
+on:
+   pull_request:
+      types: [opened, synchronize]
+   push:
+      branches: [main]
 
 jobs:
    test:
-      runs-on: ubuntu-latest
+      permissions:
+         contents: read
+         packages: read
+
+      runs-on: ubuntu-20.04
       steps:
-         - uses: actions/checkout@v3
-
-         - name: Cache node modules
-           id: cache-npm
-           uses: actions/cache@v3
+         - uses: actions/checkout@v4
            with:
-              path: ~/.npm
-              key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
-              restore-keys: |
-                 ${{ runner.os }}-node-modules-
+              fetch-depth: 0
 
-         - run: yarn install
+         - uses: pnpm/action-setup@v4
+           with:
+              run_install: |
+                 - recursive: true
+                   args: [--frozen-lockfile, --strict-peer-dependencies]
 
-         - run: yarn test
+         - uses: actions/setup-node@v4
+           with:
+              node-version: 16
+              cache: pnpm
+
+         - run: pnpm run test
+
+         - name: notify sonarqube
+           if: ${{ github.event_name == 'push' }}
+           uses: sonarsource/sonarqube-scan-action@master
+           env:
+              SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+              SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
