@@ -1,4 +1,5 @@
-import { createContext, Dispatch, FC, useContext, useMemo, useState } from 'react'
+import { useRouter } from 'next/dist/client/router'
+import { createContext, Dispatch, FC, useContext, useMemo, useReducer } from 'react'
 import { animated, useSpring } from 'react-spring'
 import styled, { css, useTheme } from 'styled-components'
 import { small } from '../styles/media'
@@ -7,7 +8,8 @@ import TriangleCanvas from './three/TriangleCanvas'
 export const SIDEBAR_WIDTH = '600px'
 
 const smallBlob = {
-   transform: 'translate(30 20) scale(0.3,0.3)',
+   transform: 'translate(130 20) scale(0.3,0.3)',
+   offset: [130, 20, 0.3, 0.3],
    strokeWidth: 0,
    d: `
       M48.9,-61.8
@@ -26,7 +28,9 @@ const smallBlob = {
 }
 
 const bigBlob = {
-   transform: 'translate(45 55) scale(1,1)',
+   ...smallBlob,
+   transform: 'translate(140 55) scale(1,1)',
+   offset: [140, 55, 1, 1],
    strokeWidth: 10,
    d: `
       M39.3,-59.2
@@ -45,8 +49,9 @@ const bigBlob = {
 }
 
 const leftBlob = {
-   transform: 'translate(20 15) scale(0.3,0.3)',
-   strokeWidth: 0,
+   ...smallBlob,
+   transform: 'translate(-40 15) scale(0.3,0.3)',
+   offset: [-40, 15, 0.3, 0.3],
    d: `
       M53.8,-74.1
       C68.9,-63.1,79.7,-46.3,79.2,-29.9
@@ -62,6 +67,11 @@ const leftBlob = {
       Z
    `,
 }
+const transitionBlob = {
+   ...leftBlob,
+   transform: 'translate(40 20) scale(0.5,1)',
+   offset: [40, 20, 0.5, 1],
+}
 
 export type SidebarPos = 'right' | 'left' | 'top_right' | 'none'
 
@@ -71,31 +81,63 @@ export function useSidebar() {
    return useContext(CTX)
 }
 
+function getBlob(pos: SidebarPos) {
+   switch (pos) {
+      case 'left':
+         return leftBlob
+      case 'right':
+         return bigBlob
+      default:
+         return smallBlob
+   }
+}
+
 const Sidebar: FC = ({ children }) => {
    const theme = useTheme()
+   const router = useRouter()
 
-   const [pos, set] = useState<SidebarPos>('right')
+   const startPos = useMemo<SidebarPos>(() => {
+      if (router.pathname === '/') return 'right'
+      else return 'left'
+   }, [router])
+   const [{ offset, ...props }, api] = useSpring(() => getBlob(startPos))
 
-   const blob = useMemo(() => {
-      switch (pos) {
-         case 'right':
-            return bigBlob
-         case 'left':
-            return leftBlob
-         default:
-            return smallBlob
-      }
-   }, [pos])
-   const props = useSpring(blob)
+   const [pos, set] = useReducer((previous: SidebarPos, value: SidebarPos) => {
+      if (previous === value) return previous
+      const blob = getBlob(value)
+      const withTransition = [previous, value].includes('left')
+      api.start({
+         to: async next => {
+            if (withTransition) await next({ ...transitionBlob, config: { duration: 200 } })
+            await next(blob)
+         },
+      })
+      return value
+   }, startPos)
 
    return (
       <CTX.Provider value={set}>
-         <Style pos={pos}>
+         <Fixed>
             <SVG viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'>
-               <animated.path fill={theme.sidebar} {...props} />
+               <animated.path
+                  fill={theme.sidebar}
+                  {...props}
+                  transform={offset.to((x, y, sx, sy) => `translate(${x},${y}) scale(${sx},${sy})`)}
+               />
             </SVG>
-            <TriangleCanvas height='500px' width='500px' />
-         </Style>
+            <Style pos={pos}>
+               <animated.section
+                  style={offset.to(
+                     (x, y) => `
+                     position: absolute,
+                     left: ${x}%,
+                     top: ${y}%,
+                  `
+                  )}>
+                  <TriangleCanvas height='500px' width='500px' />
+               </animated.section>
+            </Style>
+         </Fixed>
          {children}
       </CTX.Provider>
    )
@@ -105,33 +147,42 @@ const behind = css`
    z-index: 0;
 `
 
-const Style = styled.div<{ pos?: SidebarPos }>`
-   position: fixed;
-   height: 100%;
-   width: ${SIDEBAR_WIDTH} !important;
-   transition: left 0.5s ease, top 0.5s ease;
+const old = css<{ pos: SidebarPos }>`
    top: ${p => (p.pos === 'left' ? `calc(${SIDEBAR_WIDTH} * -0.2)` : 0)};
    left: ${p =>
       p.pos === 'left' ? `calc(${SIDEBAR_WIDTH} * -0.2)` : `calc(100vw - ${SIDEBAR_WIDTH})`};
+`
+
+const Style = styled.div<{ pos?: SidebarPos }>`
+   position: fixed;
    z-index: 100;
+   height: 100%;
+   width: ${SIDEBAR_WIDTH} !important;
+   transition: left 0.5s ease, top 0.5s ease;
 
    ${p => p.pos === 'none' && `display: none`};
    ${p => p.pos === 'left' && behind};
-   
+
    @media ${small} {
       ${behind}
    }
 `
 
 const SVG = styled.svg`
-   position: absolute;
    height: 100%;
-   filter: drop-shadow(0 0 20px #0002);
+   width: 100%;
    cursor: none;
+   filter: drop-shadow(0 0 20px #0002);
 
    path {
       cursor: default;
    }
+`
+
+const Fixed = styled.section`
+   position: fixed;
+   height: 100vh;
+   width: 100vw;
 `
 
 export default Sidebar
