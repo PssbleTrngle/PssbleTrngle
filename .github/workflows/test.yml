@@ -1,6 +1,11 @@
 name: Test
 
-on: [push]
+on:
+   push:
+      branches:
+         - main
+      paths-ignore:
+         - profile/**
 
 jobs:
    test:
