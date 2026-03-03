@@ -4,12 +4,12 @@
       <img src="https://raw.githubusercontent.com/PssbleTrngle/PssbleTrngle/main/public/images/impossible_river.svg" />
     </td>
     <td width="440" border="none">
-      <img src="https://github-readme-stats.vercel.app/api?username=PssbleTrngle&theme=react&hide_border=true&show_icons=true" />
+      <img src="https://raw.githubusercontent.com/PssbleTrngle/PssbleTrngle/refs/heads/main/profile/stats.svg" />
     </td>
   <tr>
   </tr>
     <td width="440" border="none">
-      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=PssbleTrngle&theme=react&hide_border=true&layout=compact&langs_count=8&hide=TSQL,Dockerfile&card_width=440" />
+      <img src="https://raw.githubusercontent.com/PssbleTrngle/PssbleTrngle/refs/heads/main/profile/top-langs.svg" />
     </td>
   </tr>
 </table>
