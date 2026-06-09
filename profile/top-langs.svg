@@ -130,7 +130,7 @@
           data-testid="lang-progress"
           x="0"
           y="0"
-          width="115.59"
+          width="115.55"
           height="8"
           fill="#A97BFF"
         />
@@ -138,9 +138,9 @@
         <rect
           mask="url(#rect-mask)"
           data-testid="lang-progress"
-          x="115.59"
+          x="115.55"
           y="0"
-          width="114.03"
+          width="114.11"
           height="8"
           fill="#3178c6"
         />
@@ -148,9 +148,9 @@
         <rect
           mask="url(#rect-mask)"
           data-testid="lang-progress"
-          x="229.62"
+          x="229.66"
           y="0"
-          width="91.04"
+          width="91.02"
           height="8"
           fill="#b07219"
         />
@@ -158,9 +158,9 @@
         <rect
           mask="url(#rect-mask)"
           data-testid="lang-progress"
-          x="320.66"
+          x="320.68"
           y="0"
-          width="27.15"
+          width="27.14"
           height="8"
           fill="#e34c26"
         />
@@ -168,9 +168,9 @@
         <rect
           mask="url(#rect-mask)"
           data-testid="lang-progress"
-          x="347.81"
+          x="347.82"
           y="0"
-          width="23.24"
+          width="23.23"
           height="8"
           fill="#f1e05a"
         />
@@ -200,7 +200,7 @@
           data-testid="lang-progress"
           x="387.44000000000005"
           y="0"
-          width="12.57"
+          width="12.56"
           height="8"
           fill="#c1d026"
         />
@@ -211,14 +211,14 @@
     <g class="stagger" style="animation-delay: 450ms">
       <circle cx="5" cy="6" r="5" fill="#A97BFF" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        Kotlin 29.64%
+        Kotlin 29.63%
       </text>
     </g>
   </g><g transform="translate(0, 25)">
     <g class="stagger" style="animation-delay: 600ms">
       <circle cx="5" cy="6" r="5" fill="#3178c6" />
       <text data-testid="lang-name" x="15" y="10" class='lang-name'>
-        TypeScript 29.24%
+        TypeScript 29.26%
       </text>
     </g>
   </g><g transform="translate(0, 50)">
