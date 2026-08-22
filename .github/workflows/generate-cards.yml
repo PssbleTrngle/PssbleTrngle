@@ -9,10 +9,10 @@ jobs:
    generate:
       runs-on: ubuntu-latest
       steps:
-         - uses: actions/checkout@v4
+         - uses: actions/checkout@v7
 
          - name: generate stats card
-           uses: readme-tools/github-readme-stats-action@v1
+           uses: readme-tools/github-readme-stats-action@v2
            with:
               card: stats
               options: username=${{ github.repository_owner }}&theme=react&hide_border=true&show_icons=true
@@ -20,7 +20,7 @@ jobs:
               token: ${{ secrets.GITHUB_TOKEN }}
 
          - name: generate top langs card
-           uses: readme-tools/github-readme-stats-action@v1
+           uses: readme-tools/github-readme-stats-action@v2
            with:
               card: top-langs
               options: username=${{ github.repository_owner }}&theme=react&hide_border=true&layout=compact&langs_count=8&hide=TSQL,Dockerfile&card_width=440
