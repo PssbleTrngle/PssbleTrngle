@@ -9,7 +9,7 @@
         aria-labelledby="descId"
       >
         <title id="titleId">Niklas Widmann&#39;s GitHub Stats, Rank: A</title>
-        <desc id="descId">Total Stars Earned: 112, Total Commits  (last year) : 1466, Total PRs: 487, Total Issues: 331, Contributed to (last year): 56</desc>
+        <desc id="descId">Total Stars Earned: 112, Total Commits  (last year) : 1466, Total PRs: 487, Total Issues: 331, Contributed to (last year): 54</desc>
         <style>
           .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -229,7 +229,7 @@
         x="224.01"
         y="12.5"
         data-testid="contribs"
-      >56</text>
+      >54</text>
     </g>
   </g>
     </svg>
