@@ -9,7 +9,7 @@
         aria-labelledby="descId"
       >
         <title id="titleId">Niklas Widmann&#39;s GitHub Stats, Rank: A</title>
-        <desc id="descId">Total Stars Earned: 116, Total Commits  (last year) : 1444, Total PRs: 493, Total Issues: 339, Contributed to (last year): 53</desc>
+        <desc id="descId">Total Stars Earned: 116, Total Commits  (last year) : 1446, Total PRs: 493, Total Issues: 339, Contributed to (last year): 53</desc>
         <style>
           .header {
             font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -73,7 +73,7 @@
         stroke-dashoffset: 251.32741228718345;
       }
       to {
-        stroke-dashoffset: 32.77606433892471;
+        stroke-dashoffset: 32.77183715408082;
       }
     }
   
